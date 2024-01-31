@@ -121,7 +121,11 @@ func parseArabic(operand string) (int, error) {
 
 	if len(operand) != 1 && len(operand) != 3 {
 
-		return 10, nil
+		if (operand[0] == '1') && (operand[1] == '0') {
+			return 10, nil
+		} else {
+			return 0, fmt.Errorf("Введено сишкм большое число")
+		}
 	}
 
 	arabicNums := map[rune]int{
