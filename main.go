@@ -63,8 +63,8 @@ func calculate(input string) (int, bool, error) {
 	}
 
 	// Проверка отрицательного результата для римских чисел
-	if isRoman(parts[0]) && isRoman(parts[2]) && result < 0 {
-		return 0, true, fmt.Errorf("Операция с римскими числами дала отрицательный результат")
+	if isRoman(parts[0]) && isRoman(parts[2]) && result <= 0 {
+		return 0, true, fmt.Errorf("Операция с римскими числами дала нулевой или отрицательный результат")
 	}
 
 	return result, isRoman(parts[0]), nil
@@ -119,28 +119,30 @@ func isArabic(operand string) bool {
 // парсинг арабских чисел
 func parseArabic(operand string) (int, error) {
 
-	if len(operand) != 1 && len(operand) != 3 {
+	if len(operand) == 1 || (len(operand) == 3 && !strings.Contains("1234567890", string(operand[1]))) {
 
-		if (operand[0] == '1') && (operand[1] == '0') {
-			return 10, nil
-		} else {
-			return 0, fmt.Errorf("Введено сишкм большое число")
+		arabicNums := map[rune]int{
+			'1': 1,
+			'2': 2,
+			'3': 3,
+			'4': 4,
+			'5': 5,
+			'6': 6,
+			'7': 7,
+			'8': 8,
+			'9': 9,
 		}
+
+		return arabicNums[rune(operand[0])], nil
+
 	}
 
-	arabicNums := map[rune]int{
-		'1': 1,
-		'2': 2,
-		'3': 3,
-		'4': 4,
-		'5': 5,
-		'6': 6,
-		'7': 7,
-		'8': 8,
-		'9': 9,
+	if (len(operand) == 2 || (len(operand) == 4 && !strings.Contains("1234567890", string(operand[2])))) && operand[0] == '1' && operand[1] == '0' {
+		return 10, nil
+	} else {
+		return 0, fmt.Errorf("Один из оперрандоов выходит из заданного диапазона")
 	}
 
-	return arabicNums[rune(operand[0])], nil
 }
 
 func intToRoman(num int) string {
