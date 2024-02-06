@@ -27,7 +27,7 @@ func main() {
 func calculate(input string) (int, bool, error) {
 	parts := strings.Split(input, " ")
 	if len(parts) != 3 {
-		return 0, true, fmt.Errorf("Неверный формат ввода") // разделение входящей строки на операнды и оператор
+		panic("Неверный формат ввода") // разделение входящей строки на операнды и оператор
 	}
 
 	operand1, err := parseOperand(parts[0]) //парсинг операндов
@@ -44,7 +44,7 @@ func calculate(input string) (int, bool, error) {
 
 	// Проверка на одновременное использование разных систем счисления
 	if (isRoman(parts[0]) && isArabic(parts[2])) || (isArabic(parts[0]) && isRoman(parts[2])) {
-		return 0, true, fmt.Errorf("Вы одновременно использовали разные системы счисления")
+		panic("Вы одновременно использовали разные системы счисления")
 	}
 
 	// Выполнение операции
@@ -59,12 +59,12 @@ func calculate(input string) (int, bool, error) {
 	case "/":
 		result = operand1 / operand2
 	default:
-		return 0, true, fmt.Errorf("Недопустимый оператор")
+		panic("Недопустимый оператор")
 	}
 
 	// Проверка отрицательного результата для римских чисел
 	if isRoman(parts[0]) && isRoman(parts[2]) && result <= 0 {
-		return 0, true, fmt.Errorf("Операция с римскими числами дала нулевой или отрицательный результат")
+		panic("Операция с римскими числами дала нулевой или отрицательный результат")
 	}
 
 	return result, isRoman(parts[0]), nil
@@ -140,7 +140,7 @@ func parseArabic(operand string) (int, error) {
 	if (len(operand) == 2 || (len(operand) == 4 && !strings.Contains("1234567890", string(operand[2])))) && operand[0] == '1' && operand[1] == '0' {
 		return 10, nil
 	} else {
-		return 0, fmt.Errorf("Один из оперрандоов выходит из заданного диапазона")
+		panic("Один из оперрандоов выходит из заданного диапазона")
 	}
 
 }
